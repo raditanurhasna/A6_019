@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +32,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -53,6 +55,12 @@ object DestinasiHome : DestinasiNavigasi {
 @Composable
 fun HomeScreen(
     navigateToItemEntry: () -> Unit,
+    navigateToLokasi: () -> Unit,
+    navigateToKlien: () -> Unit,
+    navigateToVendor: () -> Unit,
+    onLokasiClick: () -> Unit,
+    onKlienClick: () -> Unit,
+    onVendorClick: () -> Unit,
     modifier: Modifier = Modifier,
     onDetailClick: (String) -> Unit = {},
     viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory)
@@ -80,10 +88,48 @@ fun HomeScreen(
             }
         },
     ) { innerPadding ->
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ){
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ){
+                Button(
+                    onClick = onLokasiClick,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Lokasi", color = Color.White)
+                }
+                Button(
+                    onClick = onKlienClick,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF03A9F4)),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Klien", color = Color.White)
+                }
+                Button(
+                    onClick = onVendorClick,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF03A9F4)),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Vendor", color = Color.White)
+                }
+            }
+
+
+    }
         HomeStatus(
             acaraUiState = viewModel.acaraUiState,
             retryAction = { viewModel.getAcara() },
             modifier = Modifier.padding(innerPadding),
+            onLokasiClick = onLokasiClick,
+            onKlienClick = onKlienClick,
+            onVendorClick = onVendorClick,
             onDetailClick = onDetailClick,
             onDeleteClick = {
                 viewModel.deleteAcara(it.idacara)
@@ -98,6 +144,9 @@ fun HomeStatus(
     acaraUiState: HomeUiState,  // Ubah dari AcaraUiState menjadi HomeUiState
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
+    onLokasiClick: () -> Unit = {},
+    onKlienClick: () -> Unit = {},
+    onVendorClick: () -> Unit = {},
     onDeleteClick: (Acara) -> Unit = {},
     onDetailClick: (String) -> Unit
 ) {
