@@ -23,7 +23,7 @@ interface LokasiService {
     @GET("bacalokasi.php")
     suspend fun getAllLokasi(): List<Lokasi>
 
-    @GET("baca1lokasi.php/{id_lokasi}")
+    @GET("baca1lokasi.php{id_lokasi}")
     suspend fun getLokasiById(@Path("id_lokasi") idLokasi: String): Lokasi
 
     @PUT("editlokasi.php/{id_lokasi}")
