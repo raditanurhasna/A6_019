@@ -2,8 +2,8 @@ package com.example.projectakhir
 
 
 import android.app.Application
-import com.example.projectakhir.dependeciesinjection.AcaraContainer
 import com.example.projectakhir.dependeciesinjection.AppContainer
+import com.example.projectakhir.dependeciesinjection.AppContainerImpl
 
 
 class AcaraApplications : Application() {
@@ -11,6 +11,6 @@ class AcaraApplications : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        container = AcaraContainer()
+        container = AppContainerImpl()
     }
 }
