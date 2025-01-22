@@ -48,7 +48,7 @@ import com.example.projectakhir.ui.viewmodel.acara.HomeViewModel
 
 object DestinasiHome : DestinasiNavigasi {
     override val route = "home"
-    override val titleRes = "Home Acara"
+    override val titleRes = "Daftar Acara"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,16 +88,19 @@ fun HomeScreen(
             }
         },
     ) { innerPadding ->
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-        ){
+                .padding(16.dp) // Menambahkan padding global
+        ) {
+            // Baris Tombol
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxWidth()
-            ){
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp) // Memberikan jarak ke elemen di bawahnya
+            ) {
                 Button(
                     onClick = onLokasiClick,
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
@@ -121,23 +124,23 @@ fun HomeScreen(
                 }
             }
 
-
-    }
-        HomeStatus(
-            acaraUiState = viewModel.acaraUiState,
-            retryAction = { viewModel.getAcara() },
-            modifier = Modifier.padding(innerPadding),
-            onLokasiClick = onLokasiClick,
-            onKlienClick = onKlienClick,
-            onVendorClick = onVendorClick,
-            onDetailClick = onDetailClick,
-            onDeleteClick = {
-                viewModel.deleteAcara(it.idacara)
-                viewModel.getAcara()
-            }
-        )
+            // Daftar Acara
+            HomeStatus(
+                acaraUiState = viewModel.acaraUiState,
+                retryAction = { viewModel.getAcara() },
+                modifier = Modifier.fillMaxSize(),
+                onDetailClick = onDetailClick,
+                onLokasiClick = navigateToLokasi,
+                onDeleteClick = {
+                    viewModel.deleteAcara(it.idacara)
+                    viewModel.getAcara()
+                }
+            )
+        }
     }
 }
+
+
 
 @Composable
 fun HomeStatus(
