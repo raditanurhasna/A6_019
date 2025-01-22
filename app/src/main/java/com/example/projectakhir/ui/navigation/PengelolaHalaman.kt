@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.projectakhir.ui.screens.EntryAcaraScreen
 import com.example.projectakhir.ui.view.Acara.*
 import com.example.projectakhir.ui.view.Lokasi.DestinasiEntryLokasi
+import com.example.projectakhir.ui.view.Lokasi.DetailViewLokasi
 import com.example.projectakhir.ui.view.Lokasi.EntryLokasiScreen
 import com.example.projectakhir.ui.view.Lokasi.HomeScreenLokasi
 import com.example.restapi.ui.view.DetailView
@@ -102,17 +103,28 @@ fun PengelolaHalaman(
         composable(DestinasiHomeLokasi.route) {
             HomeScreenLokasi(
                 navigateToLokasiEntry = {
-                    navController.navigate(DestinasiEntry.route)
+                    navController.navigate(DestinasiEntryLokasi.route)
                 },
                 onDetailClick = { idLokasi ->
                     navController.navigate("${DestinasiDetail.route}/$idLokasi")
                 },
                 onBack = {
-                    // Menggunakan popBackStack untuk kembali ke halaman sebelumnya
-                    navController.popBackStack()
+                    navController.navigate(DestinasiHome.route) {
+                        popUpTo(DestinasiHome.route){
+                            inclusive = false
+                        }
+                    }
                 }
             )
         }
+
+
+
+
+
+
+
+
 
 
     }
