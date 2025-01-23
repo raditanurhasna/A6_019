@@ -3,128 +3,185 @@ package com.example.projectakhir.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.projectakhir.ui.screens.DestinasiEntryAcara
 import com.example.projectakhir.ui.screens.EntryAcaraScreen
 import com.example.projectakhir.ui.view.Acara.*
+import com.example.projectakhir.ui.view.Klien.DestinasiDetailKlien
+import com.example.projectakhir.ui.view.Klien.DestinasiHomeKlien
+import com.example.projectakhir.ui.view.Klien.DestinasiUpdateKlien
+import com.example.projectakhir.ui.view.Klien.DetailViewKlien
+import com.example.projectakhir.ui.view.Klien.HomeScreenKlien
+import com.example.projectakhir.ui.view.Klien.UpdateScreenKlien
+import com.example.projectakhir.ui.view.Lokasi.DestinasiDetailLokasi
 import com.example.projectakhir.ui.view.Lokasi.DestinasiEntryLokasi
+import com.example.projectakhir.ui.view.Lokasi.DestinasiHomeLokasi
+import com.example.projectakhir.ui.view.Lokasi.DestinasiUpdateLokasi
 import com.example.projectakhir.ui.view.Lokasi.DetailViewLokasi
 import com.example.projectakhir.ui.view.Lokasi.EntryLokasiScreen
-import com.example.projectakhir.ui.view.Lokasi.HomeScreenLokasi
-import com.example.restapi.ui.view.DetailView
+import com.example.projectakhir.ui.view.Lokasi.HomeLokasi
+import com.example.projectakhir.ui.view.Lokasi.UpdateScreenLokasi
+import com.example.projectakhir.ui.view.Vendor.DestinasiDetailVendor
+import com.example.projectakhir.ui.view.Vendor.DestinasiHomeVendor
+import com.example.projectakhir.ui.view.Vendor.DestinasiUpdateVendor
+import com.example.projectakhir.ui.view.Vendor.DetailViewVendor
+import com.example.projectakhir.ui.view.Vendor.HomeScreenVendor
+import com.example.projectakhir.ui.view.Vendor.UpdateScreenVendor
+import com.example.projectakhir.ui.view.vendor.DestinasiEntryVendor
+import com.example.projectakhir.ui.view.vendor.EntryVendorScreen
+import com.example.restapi.ui.view.DestinasiDetailAcara
+import com.example.restapi.ui.view.DestinasiEntryKlien
+import com.example.restapi.ui.view.DetailViewAcara
+import com.example.restapi.ui.view.EntryKlienScreen
 
-object DestinasiEntry {
-    const val route = "entry"
-}
-
-object DestinasiDetail {
-    const val route = "detail"
-}
-
-object DestinasiUpdate {
-    const val route = "update"
-}
-
-object DestinasiHomeLokasi {
-    const val route = "homeLokasi"
-}
-
-object DestinasiHome {
-    const val route = "home"
-}
 
 @Composable
-fun PengelolaHalaman(
-    navController: NavHostController = rememberNavController(),
-    modifier: Modifier = Modifier
-) {
+fun PengelolaHalaman(navController: NavHostController = rememberNavController()) {
     NavHost(
         navController = navController,
-        startDestination = DestinasiHome.route,
-        modifier = modifier,
+        startDestination = DestinasiHomeAcara.route,  // Ubah start destination
+        modifier = Modifier,
     ) {
-        // Halaman utama
-        composable(DestinasiHome.route) {
-            HomeScreen(
-                navigateToItemEntry = { navController.navigate(DestinasiEntry.route) },
+        // ACARA
+        composable(DestinasiHomeAcara.route) {
+            HomeScreenAcara(
+                navigateToItemEntry = { navController.navigate(DestinasiEntryAcara.route) },
+                navigateToKlien = { navController.navigate(DestinasiHomeKlien.route) },
                 navigateToLokasi = { navController.navigate(DestinasiHomeLokasi.route) },
-                navigateToKlien = {},
-                navigateToVendor = {},
-                onLokasiClick = { navController.navigate(DestinasiHomeLokasi.route) },
-                onKlienClick = {},
-                onVendorClick = {},
-                onDetailClick = { itemId ->
-                    navController.navigate("${DestinasiDetail.route}/$itemId")
+                navigateToVendor = { navController.navigate(DestinasiHomeVendor.route) },
+                onDetailClick = { idAcara ->
+                    navController.navigate("${DestinasiDetailAcara.route}/$idAcara")
                 }
             )
         }
 
-        // Halaman input acara
-        composable(DestinasiEntry.route) {
+        // Entry Acara Screen
+        composable(DestinasiEntryAcara.route) {
             EntryAcaraScreen(
-                navigateBack = { navController.popBackStack() }
+                navigateBack = { navController.navigateUp() },
             )
         }
 
-        // Halaman input lokasi
+        // Detail Acara
+        composable(
+            route = "${DestinasiDetailAcara.route}/{idAcara}",
+            arguments = listOf(navArgument("idAcara") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val idAcara = backStackEntry.arguments?.getString("idAcara") ?: ""
+            DetailViewAcara(
+                idAcara = idAcara,
+                onNavigateBack = { navController.navigateUp() },
+                onEditClick = { idAcara ->
+                    navController.navigate("${DestinasiUpdateAcara.route}/$idAcara")
+                },
+            )
+        }
+
+        // Edit Acara
+        composable(
+            route = "${DestinasiUpdateAcara.route}/{idAcara}",
+            arguments = listOf(navArgument("idAcara") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val idAcara = backStackEntry.arguments?.getString("idAcara") ?: ""
+            UpdateScreenAcara(
+                idAcara = idAcara,
+                onNavigateBack = { navController.navigateUp() }
+            )
+        }
+
+        // LOKASI HOME
+        composable(DestinasiHomeLokasi.route) {
+            HomeLokasi(
+                navigateToLokasiEntry = { navController.navigate(DestinasiEntryLokasi.route) },
+                onDetailClick = { idLokasi ->
+                    navController.navigate("${DestinasiDetailLokasi.route}/$idLokasi")
+                },
+                navigateBack = { navController.navigate(DestinasiHomeAcara.route) }
+            )
+        }
+
+        // Entry Lokasi Screen
         composable(DestinasiEntryLokasi.route) {
             EntryLokasiScreen(
-                navigateBack = { navController.popBackStack() }
+                navigateBack = { navController.navigateUp() },
             )
         }
 
-        // Halaman detail (item atau lokasi)
-        composable("${DestinasiDetail.route}/{id}") { backStackEntry ->
-            val id = backStackEntry.arguments?.getString("id")
-            if (id != null) {
-                DetailView(
-                    id = id,
-                    onNavigateBack = { navController.popBackStack() },
-                    onEditClick = {}
-                )
-            }
-        }
-
-
-
-        // Halaman edit/update acara
-        composable("${DestinasiUpdate.route}/{itemId}") { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getString("itemId")
-            if (itemId != null) {
-                UpdateScreen(
-                    id = itemId,
-                    onNavigateBack = { navController.popBackStack() }
-                )
-            }
-        }
-
-        // Halaman lokasi
-        composable(DestinasiHomeLokasi.route) {
-            HomeScreenLokasi(
-                navigateToLokasiEntry = {
-                    navController.navigate(DestinasiEntryLokasi.route)
+        // Detail Lokasi
+        composable(
+            route = "${DestinasiDetailLokasi.route}/{idLokasi}",
+            arguments = listOf(navArgument("idLokasi") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val idLokasi = backStackEntry.arguments?.getString("idLokasi") ?: ""
+            DetailViewLokasi(
+                idLokasi = idLokasi,
+                onNavigateBack = { navController.navigateUp() },
+                onEditClick = { idLokasi ->
+                    navController.navigate("${DestinasiUpdateLokasi.route}/$idLokasi")
                 },
-                onDetailClick = { idLokasi ->
-                    navController.navigate("${DestinasiDetail.route}/$idLokasi")
-                },
-                onBack = {
-                    navController.navigate(DestinasiHome.route) {
-                        popUpTo(DestinasiHome.route){
-                            inclusive = false
-                        }
-                    }
-                }
             )
         }
 
+        // Edit Lokasi
+        composable(
+            route = "${DestinasiUpdateLokasi.route}/{idLokasi}",
+            arguments = listOf(navArgument("idLokasi") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val idLokasi = backStackEntry.arguments?.getString("idLokasi") ?: ""
+            UpdateScreenLokasi(
+                idLokasi = idLokasi,
+                onNavigateBack = { navController.navigateUp() }
+            )
+        }
 
+        // KLIEN HOME
+        composable(DestinasiHomeKlien.route) {
+            HomeScreenKlien(
+                navigateToKlienEntry = { navController.navigate(DestinasiEntryKlien.route) },
+                onDetailClick = { idKlien ->
+                    navController.navigate("${DestinasiDetailKlien.route}/$idKlien")
+                },
+                navigateBack = { navController.navigate(DestinasiHomeAcara.route) }
+            )
+        }
 
+        // Entry Klien Screen
+        composable(DestinasiEntryKlien.route) {
+            EntryKlienScreen(
+                navigateBack = { navController.navigateUp() },
+            )
+        }
 
+        // Detail Klient
+        composable(
+            route = "${DestinasiDetailKlien.route}/{idKlien}",
+            arguments = listOf(navArgument("idKlien") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val idKlien = backStackEntry.arguments?.getString("idKlien") ?: ""
+            DetailViewKlien(
+                idKlien = idKlien,
+                onNavigateBack = { navController.navigateUp() },
+                onEditClick = { idLokasi ->
+                    navController.navigate("${DestinasiUpdateKlien.route}/$idKlien")
+                },
+            )
+        }
 
-
-
-
+        // Edit Klien
+        composable(
+            route = "${DestinasiUpdateKlien.route}/{idKlien}",
+            arguments = listOf(navArgument("idKlien") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val idKlien = backStackEntry.arguments?.getString("idKlien") ?: ""
+            UpdateScreenKlien(
+                idKlien = idKlien,
+                onNavigateBack = { navController.navigateUp() }
+            )
+        }
 
 
     }
