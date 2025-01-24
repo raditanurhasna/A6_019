@@ -9,6 +9,7 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface LokasiService {
 
@@ -23,12 +24,12 @@ interface LokasiService {
     @GET("bacalokasi.php")
     suspend fun getAllLokasi(): List<Lokasi>
 
-    @GET("baca1lokasi.php{id_lokasi}")
-    suspend fun getLokasiById(@Path("id_lokasi") idLokasi: String): Lokasi
+    @GET("baca1lokasi.php/{id_lokasi}")
+    suspend fun getLokasiById(@Query("id_lokasi") idLokasi: String): Lokasi
 
     @PUT("editlokasi.php/{id_lokasi}")
-    suspend fun updateLokasi(@Path("id_lokasi") idLokasi: String, @Body lokasi: Lokasi)
+    suspend fun updateLokasi(@Query("id_lokasi") idLokasi: String, @Body lokasi: Lokasi)
 
     @DELETE("deletelokasi.php/{id_lokasi}")
-    suspend fun deleteLokasi(@Path("id_lokasi") idLokasi: String): Response<Void>
+    suspend fun deleteLokasi(@Query("id_lokasi") idLokasi: String): Response<Void>
 }
