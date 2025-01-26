@@ -11,14 +11,14 @@ import coil.network.HttpException
 import kotlinx.coroutines.launch
 import okio.IOException
 
-sealed class HomeUiState {
-    data class Success(val klien: List<Klien>) : HomeUiState()
-    object Error : HomeUiState()
-    object Loading : HomeUiState()
+sealed class KlienUiState {
+    data class Success(val klien: List<Klien>) : KlienUiState()
+    object Error : KlienUiState()
+    object Loading : KlienUiState()
 }
 
 class HomeViewModelKlien(private val klienRepository: KlienRepository) : ViewModel() {
-    var klienUiState: HomeUiState by mutableStateOf(HomeUiState.Loading)
+    var klienUiState: KlienUiState by mutableStateOf(KlienUiState.Loading)
         private set
 
     init {
@@ -27,13 +27,13 @@ class HomeViewModelKlien(private val klienRepository: KlienRepository) : ViewMod
 
     fun getKlien() {
         viewModelScope.launch {
-            klienUiState = HomeUiState.Loading
+            klienUiState = KlienUiState.Loading
             klienUiState = try {
-                HomeUiState.Success(klienRepository.getKlien())
+                KlienUiState.Success(klienRepository.getKlien())
             } catch (e: IOException) {
-                HomeUiState.Error
+                KlienUiState.Error
             } catch (e: HttpException) {
-                HomeUiState.Error
+                KlienUiState.Error
             }
         }
     }
@@ -44,9 +44,9 @@ class HomeViewModelKlien(private val klienRepository: KlienRepository) : ViewMod
                 klienRepository.deleteKlien(idKlien)
                 getKlien() // Refresh data setelah penghapusan
             } catch (e: IOException) {
-                klienUiState = HomeUiState.Error
+                klienUiState = KlienUiState.Error
             } catch (e: HttpException) {
-                klienUiState = HomeUiState.Error
+                klienUiState = KlienUiState.Error
             }
         }
     }

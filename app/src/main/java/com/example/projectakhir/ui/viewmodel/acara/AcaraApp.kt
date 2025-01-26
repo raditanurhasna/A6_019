@@ -14,9 +14,7 @@ import com.example.projectakhir.ui.navigation.PengelolaHalaman
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AcaraApp(
-    modifier: Modifier = Modifier
-){
+fun AcaraApp(modifier: Modifier = Modifier){
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold (
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -27,7 +25,7 @@ fun AcaraApp(
                 .fillMaxSize()
                 .padding(it)
         ) {
-            PengelolaHalaman(modifier = Modifier)
+            PengelolaHalaman()
         }
     }
 }

@@ -3,7 +3,11 @@ package com.example.projectakhir.ui.viewmodel.acara
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectakhir.model.Acara
+import com.example.projectakhir.model.Klien
+import com.example.projectakhir.model.Lokasi
 import com.example.projectakhir.repository.AcaraRepository
+import com.example.projectakhir.repository.KlienRepository
+import com.example.projectakhir.repository.LokasiRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -27,13 +31,48 @@ sealed class UpdateUiState {
 }
 
 class UpdateViewModel(
-    private val acaraRepository: AcaraRepository
+    private val acaraRepository: AcaraRepository,
+    private val klienRepo: KlienRepository,
+    private val lokasiRepo: LokasiRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UpdateUiState>(UpdateUiState.Idle)
     val uiState: StateFlow<UpdateUiState> = _uiState
 
     private var currentFormData: UpdateUiEvent? = null
+
+    var klienList: List<Klien> = emptyList()
+    var lokasiList: List<Lokasi> = emptyList()
+
+    var klienIds: List<String> = emptyList()
+    var lokasiIds: List<String> = emptyList()
+
+    init {
+        fetchKlienList()
+        fetchLokasiList()
+    }
+
+    private fun fetchKlienList() {
+        viewModelScope.launch {
+            try {
+                klienList = klienRepo.getKlien()
+                klienIds = klienList.map { it.idKlien }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun fetchLokasiList() {
+        viewModelScope.launch {
+            try {
+                lokasiList = lokasiRepo.getLokasi()
+                lokasiIds = lokasiList.map { it.idLokasi }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 
     fun loadAcaraData(id: String) {
         _uiState.value = UpdateUiState.Loading

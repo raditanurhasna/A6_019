@@ -11,6 +11,10 @@ import androidx.navigation.navArgument
 import com.example.projectakhir.ui.screens.DestinasiEntryAcara
 import com.example.projectakhir.ui.screens.EntryAcaraScreen
 import com.example.projectakhir.ui.view.Acara.*
+import com.example.projectakhir.ui.view.DestinasiDetailAcara
+import com.example.projectakhir.ui.view.DestinasiEntryKlien
+import com.example.projectakhir.ui.view.DetailViewAcara
+import com.example.projectakhir.ui.view.EntryKlienScreen
 import com.example.projectakhir.ui.view.Klien.DestinasiDetailKlien
 import com.example.projectakhir.ui.view.Klien.DestinasiHomeKlien
 import com.example.projectakhir.ui.view.Klien.DestinasiUpdateKlien
@@ -26,17 +30,14 @@ import com.example.projectakhir.ui.view.Lokasi.EntryLokasiScreen
 import com.example.projectakhir.ui.view.Lokasi.HomeLokasi
 import com.example.projectakhir.ui.view.Lokasi.UpdateScreenLokasi
 import com.example.projectakhir.ui.view.Vendor.DestinasiDetailVendor
+import com.example.projectakhir.ui.view.Vendor.DestinasiEntryVendor
 import com.example.projectakhir.ui.view.Vendor.DestinasiHomeVendor
 import com.example.projectakhir.ui.view.Vendor.DestinasiUpdateVendor
 import com.example.projectakhir.ui.view.Vendor.DetailViewVendor
+import com.example.projectakhir.ui.view.Vendor.EntryVendorScreen
 import com.example.projectakhir.ui.view.Vendor.HomeScreenVendor
 import com.example.projectakhir.ui.view.Vendor.UpdateScreenVendor
-import com.example.projectakhir.ui.view.vendor.DestinasiEntryVendor
-import com.example.projectakhir.ui.view.vendor.EntryVendorScreen
-import com.example.restapi.ui.view.DestinasiDetailAcara
-import com.example.restapi.ui.view.DestinasiEntryKlien
-import com.example.restapi.ui.view.DetailViewAcara
-import com.example.restapi.ui.view.EntryKlienScreen
+
 
 
 @Composable
@@ -50,8 +51,8 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
         composable(DestinasiHomeAcara.route) {
             HomeScreenAcara(
                 navigateToItemEntry = { navController.navigate(DestinasiEntryAcara.route) },
-                navigateToKlien = { navController.navigate(DestinasiHomeKlien.route) },
-                navigateToLokasi = { navController.navigate(DestinasiHomeLokasi.route) },
+                navigateToKlien = { navController.navigate(DestinasiHomeKlien.route)},
+                navigateToLokasi = { navController.navigate(DestinasiHomeLokasi.route)},
                 navigateToVendor = { navController.navigate(DestinasiHomeVendor.route) },
                 onDetailClick = { idAcara ->
                     navController.navigate("${DestinasiDetailAcara.route}/$idAcara")
@@ -183,6 +184,49 @@ fun PengelolaHalaman(navController: NavHostController = rememberNavController())
             )
         }
 
+        // VENDORS HOME
+        composable(DestinasiHomeVendor.route) {
+            HomeScreenVendor(
+                navigateToVendorEntry = { navController.navigate(DestinasiEntryVendor.route) },
+                onDetailClick = { idVendor ->
+                    navController.navigate("${DestinasiDetailVendor.route}/$idVendor")
+                },
+                navigateBack = { navController.navigate(DestinasiHomeAcara.route) }
+            )
+        }
 
+        // Entry Vendor Screen
+        composable(DestinasiEntryVendor.route) {
+            EntryVendorScreen(
+                navigateBack = { navController.navigateUp() },
+            )
+        }
+
+        // Detail Vendor
+        composable(
+            route = "${DestinasiDetailVendor.route}/{idVendor}",
+            arguments = listOf(navArgument("idVendor") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val idVendor = backStackEntry.arguments?.getString("idVendor") ?: ""
+            DetailViewVendor(
+                idVendor = idVendor,
+                onNavigateBack = { navController.navigateUp() },
+                onEditClick = { idVendor ->
+                    navController.navigate("${DestinasiUpdateVendor.route}/$idVendor")
+                },
+            )
+        }
+
+        // Edit Vendor
+        composable(
+            route = "${DestinasiUpdateVendor.route}/{idVendor}",
+            arguments = listOf(navArgument("idVendor") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val idVendor = backStackEntry.arguments?.getString("idVendor") ?: ""
+            UpdateScreenVendor(
+                idVendor = idVendor,
+                onNavigateBack = { navController.navigateUp() }
+            )
+        }
     }
 }

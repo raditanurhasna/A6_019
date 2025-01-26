@@ -1,7 +1,6 @@
 package com.example.projectakhir.ui.viewmodel.Klien
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.projectakhir.model.Klien
 import com.example.projectakhir.repository.KlienRepository

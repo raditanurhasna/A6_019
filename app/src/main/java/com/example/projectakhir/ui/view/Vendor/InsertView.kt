@@ -1,4 +1,4 @@
-package com.example.projectakhir.ui.view.vendor
+package com.example.projectakhir.ui.view.Vendor
 
 import com.example.projectakhir.ui.customewidget.CostumeTopAppBar
 import com.example.projectakhir.ui.navigation.DestinasiNavigasi

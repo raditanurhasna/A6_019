@@ -3,15 +3,20 @@ package com.example.projectakhir.ui.view.Klien
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.example.projectakhir.R
 import com.example.projectakhir.model.Klien
-import com.example.projectakhir.ui.customewidget.CostumeTopAppBar
 import com.example.projectakhir.ui.navigation.DestinasiNavigasi
-import com.example.projectakhir.ui.viewmodel.Klien.HomeUiState
 import com.example.projectakhir.ui.viewmodel.PenyediaViewModel
-import com.example.projectakhir.ui.viewmodel.acara.HomeViewModel
-import android.media.Image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -19,7 +24,18 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,13 +44,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.projectakhir.ui.view.Lokasi.DestinasiHomeLokasi
 import com.example.projectakhir.ui.viewmodel.Klien.HomeViewModelKlien
+import com.example.projectakhir.ui.viewmodel.Klien.KlienUiState
 
 
 object DestinasiHomeKlien : DestinasiNavigasi {
     override val route = "home_klien"
-    override val titleRes = "Home Klien"
+    override val titleRes = "Daftar Klien"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -89,7 +105,7 @@ fun HomeScreenKlien (
         },
     ) { innerPadding ->
         HomeStatus(
-            homeUiState = viewModel.klienUiState,
+            klienUiState = viewModel.klienUiState,
             retryAction = { viewModel.getKlien() },
             modifier = Modifier.padding(innerPadding),
             onDetailClick = onDetailClick,
@@ -103,22 +119,22 @@ fun HomeScreenKlien (
 
 @Composable
 fun HomeStatus(
-    homeUiState: HomeUiState,
+    klienUiState: KlienUiState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
     onDeleteClick: (Klien) -> Unit = {},
     onDetailClick: (String) -> Unit
 ) {
-    when (homeUiState) {
-        is HomeUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
-        is HomeUiState.Success ->
-            if (homeUiState.klien.isEmpty()) {
+    when (klienUiState) {
+        is KlienUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
+        is KlienUiState.Success ->
+            if (klienUiState.klien.isEmpty()) {
                 Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(text = "Tidak ada data klien")
                 }
             } else {
                 KlienLayout(
-                    klien = homeUiState.klien,
+                    klien = klienUiState.klien,
                     modifier = modifier.fillMaxWidth(),
                     onDetailClick = {
                         onDetailClick(it.idKlien)
@@ -128,7 +144,7 @@ fun HomeStatus(
                     }
                 )
             }
-        is HomeUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
+        is KlienUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
     }
 }
 

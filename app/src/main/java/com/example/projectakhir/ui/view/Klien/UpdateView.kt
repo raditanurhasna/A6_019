@@ -2,15 +2,29 @@ package com.example.projectakhir.ui.view.Klien
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.example.projectakhir.ui.customewidget.CostumeTopAppBar
 import com.example.projectakhir.ui.navigation.DestinasiNavigasi
 import com.example.projectakhir.ui.viewmodel.Klien.UpdateViewModelKlien
 import com.example.projectakhir.ui.viewmodel.PenyediaViewModel
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -36,7 +50,7 @@ fun UpdateScreenKlien(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val uiState by viewModel.uiState.collectAsState()
 
-    // Load data once when the screen opens
+
     LaunchedEffect(idKlien) {
         viewModel.loadKlienData(idKlien)
     }
@@ -96,6 +110,7 @@ fun UpdateForm(
     var idKlien by remember { mutableStateOf(idKlien) }
     var namaKlien by remember { mutableStateOf(namaKlien) }
     var kontakKlien by remember { mutableStateOf(kontakKlien) }
+    var selectedKontakType by remember { mutableStateOf("Email") }
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -116,14 +131,24 @@ fun UpdateForm(
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
+        Text("Pilih Jenis Kontak:")
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            RadioButton(
+                selected = selectedKontakType == "Email",
+                onClick = { selectedKontakType = "Email" }
+            )
+            Text("Email")
 
-        OutlinedTextField(
-            value = kontakKlien,
-            onValueChange = { kontakKlien = it },
-            label = { Text("Kontak Klien") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true
-        )
+            RadioButton(
+                selected = selectedKontakType == "Nomor Telepon",
+                onClick = { selectedKontakType = "Nomor Telepon" }
+            )
+            Text("Nomor Telepon")
+        }
+
 
         Button(
             onClick = {

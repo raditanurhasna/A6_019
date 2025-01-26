@@ -11,14 +11,14 @@ import com.example.projectakhir.repository.LokasiRepository
 import kotlinx.coroutines.launch
 import okio.IOException
 
-sealed class HomeUiState {
-    data class Success(val lokasi: List<Lokasi>) : HomeUiState()
-    object Error : HomeUiState()
-    object Loading : HomeUiState()
+sealed class LokasiUiState {
+    data class Success(val lokasi: List<Lokasi>) : LokasiUiState()
+    object Error : LokasiUiState()
+    object Loading : LokasiUiState()
 }
 
 class HomeViewModelLokasi(private val lokasiRepo: LokasiRepository) : ViewModel() {
-    var lokasiUiState: HomeUiState by mutableStateOf(HomeUiState.Loading)
+    var lokasiUiState: LokasiUiState by mutableStateOf(LokasiUiState.Loading)
         private set
 
     init {
@@ -27,13 +27,13 @@ class HomeViewModelLokasi(private val lokasiRepo: LokasiRepository) : ViewModel(
 
     fun getLokasi() {
         viewModelScope.launch {
-            lokasiUiState = HomeUiState.Loading
+            lokasiUiState = LokasiUiState.Loading
             lokasiUiState = try {
-                HomeUiState.Success(lokasiRepo.getLokasi())
+                LokasiUiState.Success(lokasiRepo.getLokasi())
             } catch (e: IOException) {
-                HomeUiState.Error
+                LokasiUiState.Error
             } catch (e: HttpException) {
-                HomeUiState.Error
+                LokasiUiState.Error
             }
         }
     }
@@ -44,9 +44,9 @@ class HomeViewModelLokasi(private val lokasiRepo: LokasiRepository) : ViewModel(
                 lokasiRepo.deleteLokasi(idLokasi)
                 getLokasi()
             } catch (e: IOException) {
-                lokasiUiState = HomeUiState.Error
+                lokasiUiState = LokasiUiState.Error
             } catch (e: HttpException) {
-                lokasiUiState = HomeUiState.Error
+                lokasiUiState = LokasiUiState.Error
             }
         }
     }

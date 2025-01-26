@@ -1,11 +1,17 @@
 package com.example.projectakhir.ui.view.Klien
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import com.example.projectakhir.model.Klien
 import com.example.projectakhir.ui.customewidget.CostumeTopAppBar
 import com.example.projectakhir.ui.navigation.DestinasiNavigasi
 import com.example.projectakhir.ui.viewmodel.Klien.DetailViewModelKlien
 import com.example.projectakhir.ui.viewmodel.PenyediaViewModel
-import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
@@ -27,8 +33,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.projectakhir.ui.view.DetailSection
 import com.example.projectakhir.ui.viewmodel.Klien.DetailUiState
-import com.example.restapi.ui.view.DetailSection
 
 
 object DestinasiDetailKlien : DestinasiNavigasi {

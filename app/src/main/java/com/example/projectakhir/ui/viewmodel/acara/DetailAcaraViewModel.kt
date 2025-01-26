@@ -1,7 +1,6 @@
 package com.example.restapi.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.projectakhir.model.Acara
 import com.example.projectakhir.repository.AcaraRepository
@@ -37,17 +36,4 @@ class DetailAcaraViewModel(private val repository: AcaraRepository) : ViewModel(
         }
     }
 
-    companion object {
-        fun provideFactory(
-            repository: AcaraRepository
-        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(DetailAcaraViewModel::class.java)) {
-                    @Suppress("UNCHECKED_CAST")
-                    return DetailAcaraViewModel(repository) as T
-                }
-                throw IllegalArgumentException("Unknown ViewModel class")
-            }
-        }
-    }
 }

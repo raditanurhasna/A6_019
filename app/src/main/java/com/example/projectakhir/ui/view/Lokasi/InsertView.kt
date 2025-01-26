@@ -30,7 +30,7 @@ import com.example.projectakhir.ui.viewmodel.lokasi.InsertViewModelLokasi
 import kotlinx.coroutines.launch
 
 object DestinasiEntryLokasi : DestinasiNavigasi {
-    override val route = "item_entry"
+    override val route = "entry_lokasi"
     override val titleRes = "Daftar Lokasi"
 }
 

@@ -1,7 +1,5 @@
 package com.example.projectakhir.ui.view.Lokasi
 
-import android.media.Image
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,13 +10,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,50 +26,67 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.projectakhir.model.Lokasi
-import com.example.projectakhir.ui.customewidget.CostumeTopAppBar
 import com.example.projectakhir.ui.navigation.DestinasiNavigasi
 import com.example.projectakhir.ui.view.Acara.OnError
 import com.example.projectakhir.ui.view.Acara.OnLoading
 import com.example.projectakhir.ui.viewmodel.PenyediaViewModel
-import com.example.projectakhir.ui.viewmodel.lokasi.HomeUiState
 import com.example.projectakhir.ui.viewmodel.lokasi.HomeViewModelLokasi
+import com.example.projectakhir.ui.viewmodel.lokasi.LokasiUiState
 
 object DestinasiHomeLokasi : DestinasiNavigasi {
-    override val route = "home"
+    override val route = "homeLokasi"
     override val titleRes = "Daftar Lokasi"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenLokasi(
+fun HomeLokasi(
     navigateToLokasiEntry: () -> Unit,
     modifier: Modifier = Modifier,
+    navigateBack: () -> Unit,
     onDetailClick: (String) -> Unit = {},
-    onBack: () -> Unit = {},
     viewModel: HomeViewModelLokasi = viewModel(factory = PenyediaViewModel.Factory)
+
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            CostumeTopAppBar(
-                title = DestinasiHomeLokasi.titleRes,
-                canNavigateBack = true,
+            TopAppBar(
+                title = {
+                    Text(
+                        text = DestinasiHomeLokasi.titleRes,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = navigateBack) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Kembali"
+                        )
+                    }
+                },
                 scrollBehavior = scrollBehavior,
-                onNavigateUp = onBack,  // Changed from onNavigateBack to onNavigateUp
-                onRefresh = {
-                    viewModel.getLokasi()
+                actions = {
+                    IconButton(onClick = { viewModel.getLokasi() }) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "Refresh",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
                 }
             )
         },
@@ -86,7 +101,7 @@ fun HomeScreenLokasi(
         },
     ) { innerPadding ->
         HomeStatus(
-            homeUiState = viewModel.lokasiUiState,
+            lokasiUiState = viewModel.lokasiUiState,
             retryAction = { viewModel.getLokasi() },
             modifier = Modifier.padding(innerPadding),
             onDetailClick = onDetailClick,
@@ -100,23 +115,23 @@ fun HomeScreenLokasi(
 
 @Composable
 fun HomeStatus(
-    homeUiState: HomeUiState,
+    lokasiUiState: LokasiUiState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
     onDeleteClick: (Lokasi) -> Unit = {},
     onDetailClick: (String) -> Unit
 ) {
-    when (homeUiState) {
-        is HomeUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
+    when (lokasiUiState) {
+        is LokasiUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
 
-        is HomeUiState.Success ->
-            if (homeUiState.lokasi.isEmpty()) {
+        is LokasiUiState.Success ->
+            if (lokasiUiState.lokasi.isEmpty()) {
                 return Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(text = "Tidak ada data Lokasi")
                 }
             } else {
                 LokasiLayout(
-                    lokasi = homeUiState.lokasi,
+                    lokasi = lokasiUiState.lokasi,
                     modifier = modifier.fillMaxWidth(),
                     onDetailClick = {
                         onDetailClick(it.idLokasi)
@@ -126,7 +141,7 @@ fun HomeStatus(
                     }
                 )
             }
-        is HomeUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
+        is LokasiUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
     }
 }
 

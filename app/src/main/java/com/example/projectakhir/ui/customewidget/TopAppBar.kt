@@ -20,6 +20,7 @@ fun CostumeTopAppBar(
     canNavigateBack: Boolean,
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
+    onNavigateUp: () -> Unit = {},
     navigateUp: () -> Unit = {},
     onRefresh: () -> Unit = {},
 ) {
@@ -47,5 +48,5 @@ fun CostumeTopAppBar(
                 }
             }
         }
-        )
+    )
 }

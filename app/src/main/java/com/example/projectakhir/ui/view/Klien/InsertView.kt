@@ -1,22 +1,24 @@
-package com.example.restapi.ui.view
+package com.example.projectakhir.ui.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
@@ -105,6 +107,8 @@ fun FormInput(
     onValueChange: (InsertUiEvent) -> Unit = {},
     enabled: Boolean = true
 ) {
+    val kontakKlienOption = listOf("Email", "Telepon")
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -125,14 +129,24 @@ fun FormInput(
             enabled = enabled,
             singleLine = true
         )
-        OutlinedTextField(
-            value = insertUiEvent.kontakklien,
-            onValueChange = { onValueChange(insertUiEvent.copy(kontakklien = it)) },
-            label = { Text("Kontak Klien") },
+        Text(text = "Kontak Klien", style = MaterialTheme.typography.bodyMedium)
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
-            singleLine = true
-        )
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            kontakKlienOption.forEach { status ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
+                    RadioButton(
+                        selected = insertUiEvent.kontakklien == status,
+                        onClick = { onValueChange(insertUiEvent.copy(kontakklien = status)) }
+                    )
+                    Text(text = status)
+                }
+            }
+        }
 
         if (enabled) {
             Text(

@@ -46,21 +46,18 @@ import com.example.projectakhir.ui.viewmodel.PenyediaViewModel
 import com.example.projectakhir.ui.viewmodel.acara.HomeUiState
 import com.example.projectakhir.ui.viewmodel.acara.HomeViewModel
 
-object DestinasiHome : DestinasiNavigasi {
+object DestinasiHomeAcara : DestinasiNavigasi {
     override val route = "home"
     override val titleRes = "Daftar Acara"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
+fun HomeScreenAcara(
     navigateToItemEntry: () -> Unit,
     navigateToLokasi: () -> Unit,
     navigateToKlien: () -> Unit,
     navigateToVendor: () -> Unit,
-    onLokasiClick: () -> Unit,
-    onKlienClick: () -> Unit,
-    onVendorClick: () -> Unit,
     modifier: Modifier = Modifier,
     onDetailClick: (String) -> Unit = {},
     viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory)
@@ -70,7 +67,7 @@ fun HomeScreen(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiHome.titleRes,
+                title = DestinasiHomeAcara.titleRes,
                 canNavigateBack = false,
                 scrollBehavior = scrollBehavior,
                 onRefresh = {
@@ -92,32 +89,32 @@ fun HomeScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(16.dp) // Menambahkan padding global
+                .padding(16.dp)
         ) {
             // Baris Tombol
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp) // Memberikan jarak ke elemen di bawahnya
+                    .padding(bottom = 16.dp)
             ) {
                 Button(
-                    onClick = onLokasiClick,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+                    onClick = navigateToLokasi,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF001F3F)),
                     modifier = Modifier.weight(1f)
                 ) {
                     Text("Lokasi", color = Color.White)
                 }
                 Button(
-                    onClick = onKlienClick,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF03A9F4)),
+                    onClick = navigateToKlien,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color( 0xFF3A6D8C)),
                     modifier = Modifier.weight(1f)
                 ) {
                     Text("Klien", color = Color.White)
                 }
                 Button(
-                    onClick = onVendorClick,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF03A9F4)),
+                    onClick = navigateToVendor,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6A9AB0)),
                     modifier = Modifier.weight(1f)
                 ) {
                     Text("Vendor", color = Color.White)
@@ -130,7 +127,6 @@ fun HomeScreen(
                 retryAction = { viewModel.getAcara() },
                 modifier = Modifier.fillMaxSize(),
                 onDetailClick = onDetailClick,
-                onLokasiClick = navigateToLokasi,
                 onDeleteClick = {
                     viewModel.deleteAcara(it.idacara)
                     viewModel.getAcara()
@@ -144,19 +140,16 @@ fun HomeScreen(
 
 @Composable
 fun HomeStatus(
-    acaraUiState: HomeUiState,  // Ubah dari AcaraUiState menjadi HomeUiState
+    acaraUiState: HomeUiState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
-    onLokasiClick: () -> Unit = {},
-    onKlienClick: () -> Unit = {},
-    onVendorClick: () -> Unit = {},
     onDeleteClick: (Acara) -> Unit = {},
     onDetailClick: (String) -> Unit
 ) {
     when (acaraUiState) {
         is HomeUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
 
-        is HomeUiState.Success ->  // Ganti AcaraUiState.Success menjadi HomeUiState.Success
+        is HomeUiState.Success ->
             if (acaraUiState.acara.isEmpty()) {
                 Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(text = "Tidak ada data Acara")
@@ -169,7 +162,7 @@ fun HomeStatus(
                     onDeleteClick = { onDeleteClick(it) }
                 )
             }
-        is HomeUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())  // Ganti AcaraUiState.Error menjadi HomeUiState.Error
+        is HomeUiState.Error -> OnError(retryAction, modifier = modifier.fillMaxSize())
     }
 }
 

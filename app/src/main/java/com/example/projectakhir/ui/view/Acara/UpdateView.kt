@@ -1,21 +1,43 @@
 package com.example.projectakhir.ui.view.Acara
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import com.example.projectakhir.ui.customewidget.CostumeTopAppBar
 import com.example.projectakhir.ui.navigation.DestinasiNavigasi
 import com.example.projectakhir.ui.viewmodel.PenyediaViewModel
 import com.example.projectakhir.ui.viewmodel.acara.UpdateUiEvent
 import com.example.projectakhir.ui.viewmodel.acara.UpdateUiState
 import com.example.projectakhir.ui.viewmodel.acara.UpdateViewModel
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.projectakhir.ui.viewmodel.widget.DynamicSelectedTextField
 
 object DestinasiUpdateAcara : DestinasiNavigasi {
     override val route = "update_acara"
@@ -33,7 +55,7 @@ fun UpdateScreenAcara(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val uiState by viewModel.uiState.collectAsState()
 
-    // Load data once when the screen opens
+
     LaunchedEffect(idAcara) {
         viewModel.loadAcaraData(idAcara)
     }
@@ -53,7 +75,8 @@ fun UpdateScreenAcara(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(16.dp),
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -74,7 +97,8 @@ fun UpdateScreenAcara(
                             viewModel.updateUiState(it)
                             viewModel.updateAcara()
                             onNavigateBack()
-                        }
+                        },
+                        viewModel = viewModel
                     )
                 }
                 is UpdateUiState.Error -> {
@@ -98,6 +122,7 @@ fun UpdateForm(
     idKlien: String,
     statusAcara: String,
     onUpdateClick: (UpdateUiEvent) -> Unit,
+    viewModel: UpdateViewModel,
     modifier: Modifier = Modifier
 ) {
     var nama by remember { mutableStateOf(namaAcara) }
@@ -106,7 +131,7 @@ fun UpdateForm(
     var tanggalBerakhirState by remember { mutableStateOf(tanggalBerakhir) }
     var lokasi by remember { mutableStateOf(idLokasi) }
     var klien by remember { mutableStateOf(idKlien) }
-    var status by remember { mutableStateOf(statusAcara) }
+    var selectedStatus by remember { mutableStateOf(statusAcara) }
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -146,42 +171,54 @@ fun UpdateForm(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
-        OutlinedTextField(
-            value = lokasi,
-            onValueChange = { lokasi = it },
-            label = { Text("ID Lokasi") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+        DynamicSelectedTextField(
+            selectedValue = klien,
+            options = viewModel.klienIds,
+            label = "Pilih ID Klien",
+            onValueChangedEvent = { klien = it },
+            modifier = Modifier.fillMaxWidth()
         )
 
-        OutlinedTextField(
-            value = klien,
-            onValueChange = { klien = it },
-            label = { Text("ID Klien") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+        DynamicSelectedTextField(
+            selectedValue = lokasi,
+            options = viewModel.lokasiIds,
+            label = "Pilih ID Lokasi",
+            onValueChangedEvent = { lokasi = it },
+            modifier = Modifier.fillMaxWidth()
         )
 
-        OutlinedTextField(
-            value = status,
-            onValueChange = { status = it },
-            label = { Text("Status Acara") },
+        // Radio Button untuk Status Acara
+        Text("Status Acara", style = MaterialTheme.typography.bodyMedium)
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
-        )
+            horizontalArrangement = Arrangement.spacedBy(1.dp)
+        ) {
+            listOf("Direncanakan", "Berlangsung", "Selesai").forEach { status ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(end = 1.dp)
+                ) {
+                    RadioButton(
+                        selected = selectedStatus == status,
+                        onClick = { selectedStatus = status }
+                    )
+                    Text(text = status)
+                }
+            }
+        }
 
         Button(
             onClick = {
                 onUpdateClick(
                     UpdateUiEvent(
                         idacara = idAcara,
-                        namaacara = namaAcara,
-                        deskripsiacara = deskripsiAcara,
+                        namaacara = nama,
+                        deskripsiacara = deskripsi,
                         tanggalmulai = tanggalMulaiState,
                         tanggalberakhir = tanggalBerakhirState,
-                        idlokasi = idLokasi,
-                        idklien = idKlien,
-                        statusacara = statusAcara
+                        idlokasi = lokasi,
+                        idklien = klien,
+                        statusacara = selectedStatus
                     )
                 )
             },

@@ -1,7 +1,6 @@
 package com.example.projectakhir.ui.viewmodel.lokasi
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.projectakhir.model.Lokasi
 import com.example.projectakhir.repository.LokasiRepository
@@ -12,7 +11,7 @@ import kotlinx.coroutines.launch
 
 sealed class DetailUiState {
     object Loading : DetailUiState()
-    data class Success(val lokasi: Lokasi) : DetailUiState() // Gantilah dengan model Lokasi
+    data class Success(val lokasi: Lokasi) : DetailUiState()
     object Error : DetailUiState()
 }
 

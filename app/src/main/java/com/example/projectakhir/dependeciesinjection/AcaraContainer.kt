@@ -6,9 +6,12 @@ import com.example.projectakhir.repository.LokasiRepository
 import com.example.projectakhir.repository.NetworkAcaraRepository
 import com.example.projectakhir.repository.NetworkKlienRepository
 import com.example.projectakhir.repository.NetworkLokasiRepository
+import com.example.projectakhir.repository.NetworkVendorRepository
+import com.example.projectakhir.repository.VendorRepository
 import com.example.projectakhir.service_api.AcaraService
 import com.example.projectakhir.service_api.KlienService
 import com.example.projectakhir.service_api.LokasiService
+import com.example.projectakhir.service_api.VendorService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -18,6 +21,7 @@ interface AppContainer {
     val acaraRepository: AcaraRepository
     val lokasiRepository: LokasiRepository
     val klienRepository: KlienRepository
+    val vendorRepository: VendorRepository
 }
 
 class AppContainerImpl : AppContainer {
@@ -29,19 +33,23 @@ class AppContainerImpl : AppContainer {
         .baseUrl(baseUrl)
         .build()
 
-    // Acara Service
+    // Service
     private val acaraService: AcaraService by lazy {
         retrofit.create(AcaraService::class.java)
     }
 
-    // Lokasi Service
+
     private val lokasiService: LokasiService by lazy {
         retrofit.create(LokasiService::class.java)
     }
 
-    // Klien Service
+
     private val klienService: KlienService by lazy {
         retrofit.create(KlienService::class.java)
+    }
+
+    private val vendorService: VendorService by lazy {
+        retrofit.create(VendorService::class.java)
     }
 
     // Repositories
@@ -56,5 +64,9 @@ class AppContainerImpl : AppContainer {
 
     override val klienRepository: KlienRepository by lazy {
         NetworkKlienRepository(klienService)
+    }
+
+    override val vendorRepository: VendorRepository by lazy {
+        NetworkVendorRepository(vendorService)
     }
 }

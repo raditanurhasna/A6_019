@@ -1,7 +1,13 @@
-package com.example.restapi.ui.view
+package com.example.projectakhir.ui.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
@@ -24,32 +30,32 @@ import com.example.projectakhir.ui.viewmodel.PenyediaViewModel
 import com.example.restapi.ui.viewmodel.DetailAcaraViewModel
 import com.example.restapi.ui.viewmodel.DetailUiState
 
-object DestinasiDetail : DestinasiNavigasi {
-    override val route = "detail"
+object DestinasiDetailAcara : DestinasiNavigasi {
+    override val route = "detail_acara"
     override val titleRes = "Detail Acara"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailView(
-    id: String,
+fun DetailViewAcara(
+    idAcara: String,
     onNavigateBack: () -> Unit,
-    onEditClick: () -> Unit,
+    onEditClick: (String) -> Unit,
     viewModel: DetailAcaraViewModel = viewModel(factory = PenyediaViewModel.Factory),
     modifier: Modifier = Modifier
 ) {
     val uiState = viewModel.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    LaunchedEffect(id) {
-        viewModel.getAcaraById(id)
+    LaunchedEffect(idAcara) {
+        viewModel.getAcaraById(idAcara)
     }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             CostumeTopAppBar(
-                title = DestinasiDetail.titleRes,
+                title = DestinasiDetailAcara.titleRes,
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 navigateUp = onNavigateBack
@@ -57,7 +63,7 @@ fun DetailView(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onEditClick,
+                onClick = {onEditClick(idAcara)},
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.padding(18.dp),
                 containerColor = MaterialTheme.colorScheme.primary
@@ -82,7 +88,7 @@ fun DetailView(
                     DetailCard(acara = state.acara)
                 }
             }
-            is DetailUiState.Error -> OnError(retryAction = { viewModel.getAcaraById(id) })
+            is DetailUiState.Error -> OnError(retryAction = { viewModel.getAcaraById(idAcara) })
         }
     }
 }
