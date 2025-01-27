@@ -79,7 +79,7 @@ fun UpdateScreenKlien(
                 is UpdateUiState.Success -> {
                     val klien = (uiState as UpdateUiState.Success).klien
                     UpdateForm(
-                        idKlien = klien.idKlien,
+                        idKlien = klien.idKlien.toString(),
                         namaKlien = klien.namaKlien,
                         kontakKlien = klien.kontakKlien,
                         onUpdateClick = {

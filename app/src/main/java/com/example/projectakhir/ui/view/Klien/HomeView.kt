@@ -110,7 +110,7 @@ fun HomeScreenKlien (
             modifier = Modifier.padding(innerPadding),
             onDetailClick = onDetailClick,
             onDeleteClick = {
-                viewModel.deleteKlien(it.idKlien)
+                viewModel.deleteKlien(it.idKlien.toString())
                 viewModel.getKlien()
             }
         )
@@ -137,7 +137,7 @@ fun HomeStatus(
                     klien = klienUiState.klien,
                     modifier = modifier.fillMaxWidth(),
                     onDetailClick = {
-                        onDetailClick(it.idKlien)
+                        onDetailClick(it.idKlien.toString())
                     },
                     onDeleteClick = {
                         onDeleteClick(it)

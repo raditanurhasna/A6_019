@@ -181,29 +181,28 @@ fun FormInput(
             modifier = Modifier.fillMaxWidth()
         )
 
-        }
-        Text(text = "Status Acara", style = MaterialTheme.typography.bodyMedium)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(1.dp)
-        ) {
-            statusAcaraOption.forEach { status ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(end = 1.dp)
-                ) {
-                    RadioButton(
-                        selected = insertUiEvent.statusacara == status,
-                        onClick = { onValueChange(insertUiEvent.copy(statusacara = status)) }
-                    )
-                    Text(text = status)
-                }
+    }
+    Text(text = "Status Acara", style = MaterialTheme.typography.bodyMedium)
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(1.dp)
+    ) {
+        statusAcaraOption.forEach { status ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(end = 1.dp)
+            ) {
+                RadioButton(
+                    selected = insertUiEvent.statusacara == status,
+                    onClick = { onValueChange(insertUiEvent.copy(statusacara = status)) }
+                )
+                Text(text = status)
             }
         }
-
-        Divider(
-            thickness = 8.dp,
-            modifier = Modifier.padding(12.dp)
-        )
     }
 
+    Divider(
+        thickness = 8.dp,
+        modifier = Modifier.padding(12.dp)
+    )
+}

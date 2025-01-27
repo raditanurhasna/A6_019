@@ -125,6 +125,7 @@ fun UpdateForm(
     viewModel: UpdateViewModel,
     modifier: Modifier = Modifier
 ) {
+    var idAcara by remember { mutableStateOf(idAcara) }
     var nama by remember { mutableStateOf(namaAcara) }
     var deskripsi by remember { mutableStateOf(deskripsiAcara) }
     var tanggalMulaiState by remember { mutableStateOf(tanggalMulai) }

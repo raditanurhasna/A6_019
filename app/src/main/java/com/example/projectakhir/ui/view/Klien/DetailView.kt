@@ -116,7 +116,7 @@ fun DetailCard(klien: Klien) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             DetailSection(title = "Informasi Umum") {
-                DetailItem("ID Klien", klien.idKlien)
+                DetailItem("ID Klien", klien.idKlien.toString())
                 DetailItem("Nama Klien", klien.namaKlien)
             }
 

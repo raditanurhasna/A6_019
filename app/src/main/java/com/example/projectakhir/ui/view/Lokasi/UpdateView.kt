@@ -108,6 +108,7 @@ fun UpdateForm(
     onUpdateClick: (UpdateUiEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var idLokasi by remember { mutableStateOf(idLokasi) }
     var nama by remember { mutableStateOf(namaLokasi) }
     var alamat by remember { mutableStateOf(alamatLokasi) }
     var kapasitas by remember { mutableStateOf(kapasitas) }

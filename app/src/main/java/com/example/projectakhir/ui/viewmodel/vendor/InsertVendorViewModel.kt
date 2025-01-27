@@ -23,10 +23,8 @@ class InsertViewModelVendor(private val vendorRepository: VendorRepository) : Vi
             try {
                 val vendor = uiState.insertUiEvent.toVendor()
                 vendorRepository.insertVendor(vendor)
-                // Penanganan jika berhasil, misalnya memberi feedback ke UI
             } catch (e: Exception) {
                 e.printStackTrace()
-                // Penanganan jika terjadi error, update UI state untuk memberi tahu pengguna
                 uiState = uiState.copy(error = e.message)
             }
         }
@@ -35,7 +33,7 @@ class InsertViewModelVendor(private val vendorRepository: VendorRepository) : Vi
 
 data class InsertUiState(
     val insertUiEvent: InsertUiEvent = InsertUiEvent(),
-    val error: String? = null // Menambahkan properti untuk error handling
+    val error: String? = null
 )
 
 data class InsertUiEvent(
